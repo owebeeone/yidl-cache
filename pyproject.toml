@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yidl-cache"
+version = "0.1.0"
+description = "Reusable compiled-code artifact cache for code-generating consumers"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+authors = [{ name = "YIDL contributors" }]
+keywords = ["code-generation", "cache", "bytecode"]
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+
+[project.optional-dependencies]
+dev = ["black==26.3.1", "pytest>=7.0"]
+
+[tool.uv]
+exclude-newer = "1 week"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/yidl_cache"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/yidl_cache", "tests", "docs", "dev-docs", "AGENTS.md", "README.md", "pyproject.toml"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.black]
+target-version = ["py312"]
