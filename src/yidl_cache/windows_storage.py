@@ -130,6 +130,25 @@ def require_ntfs(handle: int) -> None:
         )
 
 
+def require_volume_root(handle: int) -> None:
+    # A drive letter can alias a directory below uninspected physical parents.
+    # Inspect the held anchor itself; never canonicalize and reopen by path.
+    system = api()
+    name = c.create_unicode_buffer(64)
+    length = system.kernel.GetFinalPathNameByHandleW(handle, name, len(name), 1)
+    system.check(length)  # FILE_NAME_NORMALIZED | VOLUME_NAME_GUID
+    if (
+        length >= len(name)
+        or re.fullmatch(
+            r"\\\\\?\\Volume\{[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\}\\",
+            name.value,
+            re.IGNORECASE,
+        )
+        is None
+    ):
+        raise CacheStorageError("Windows cache anchor must be an actual volume root")
+
+
 def open_relative(
     parent: int,
     name: str,
@@ -209,6 +228,7 @@ def directory_handle(
                 system.check(False)
             handles.append(root)
             information(root, directory=True)
+            require_volume_root(root)
             require_ntfs(root)
             require_private(root, user, ancestor=True)
             for component in directory.parts[1:]:

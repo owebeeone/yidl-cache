@@ -1,5 +1,20 @@
 # Windows Persistence Amendment — 2026-10-23
 
+## Current review follow-up
+
+The initial implementation below was subsequently committed at
+`6d91a0cec59bb926e4ffb627847a6e1562b0dc9e` and reviewed. Code returned NO-GO
+for an unverified drive-root premise; State returned GO with a concurrency-test
+correction. [Remediation round 1 evidence](WindowsPersistence-RemEvidence-1.md)
+records the actual Windows counterexamples and the bounded correction. The
+revised backend verifies that the held anchor's normalized volume-GUID path is
+exactly a volume root; directory-backed drive substitutions or unprovable roots
+bypass before admission or decoding. Sharing modes remain unchanged, and the
+Windows test accepts only the verified safe publication/sharing-conflict
+outcomes. The original counts and manifest below remain historical evidence,
+not evidence for the revised bytes. Findings await independent re-verdicts;
+this follow-up does not self-close either review finding.
+
 ## Authority and boundary
 
 After the diagnosis below, the operator explicitly directed closing the

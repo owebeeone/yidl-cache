@@ -11,6 +11,9 @@ YIDL repository:
   accepted specification, implementation progress, and remaining gates.
 - [Windows persistence amendment](WindowsPersistence.md): separately authorized
   NTFS storage/trust implementation, TDD and real-platform evidence, and limits.
+- [Windows remediation 1 evidence](WindowsPersistence-RemEvidence-1.md): actual
+  substituted-root and publication counterexamples, bounded corrections, and
+  separately pinned revised-platform checks; independent re-verdicts pending.
 
 This repository owns the independent cache package. Consumer adapters stay in
 their own projects; YIDL core does not acquire a cache dependency.

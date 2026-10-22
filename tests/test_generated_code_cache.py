@@ -17,6 +17,7 @@ from yidl_cache import CacheBypass
 from yidl_cache import CacheDependencyError
 from yidl_cache import CacheDisabledError
 from yidl_cache import CacheHit
+from yidl_cache import CacheLocationError
 from yidl_cache import CacheMiss
 from yidl_cache import CacheReentryError
 from yidl_cache import CacheRequest
@@ -188,10 +189,24 @@ def test_different_key_recursion_is_allowed(
 
 
 def test_concurrent_misses_publish_complete_entries(
-    tmp_path: Path, cache_request: CacheRequest
+    tmp_path: Path, cache_request: CacheRequest, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     directory = tmp_path / "cache"
     rendezvous = Barrier(2)
+    sharing_failures = []
+    if sys.platform == "win32":
+        from yidl_cache import windows_storage
+
+        original = windows_storage.replace
+
+        def observe_replace(*args):
+            try:
+                return original(*args)
+            except OSError as error:
+                sharing_failures.append(error.winerror)
+                raise
+
+        monkeypatch.setattr(windows_storage, "replace", observe_replace)
 
     def run() -> object:
         cache = GeneratedCodeCache(directory, enabled=True, memory_capacity=0)
@@ -200,13 +215,34 @@ def test_concurrent_misses_publish_complete_entries(
             rendezvous.wait(timeout=10)
             return produce(cache_request)
 
-        return cache.get(cache_request, wait_and_generate)
+        return cache.get(cache_request, wait_and_generate), cache.diagnostics
 
     with ThreadPoolExecutor(max_workers=2) as executor:
         futures = [executor.submit(run) for _ in range(2)]
+        results = [future.result(timeout=15) for future in futures]
+    if sys.platform == "win32":
+        assert any(isinstance(result, CacheMiss) for result, _ in results)
         assert all(
-            isinstance(future.result(timeout=15), CacheMiss) for future in futures
+            isinstance(result, (CacheMiss, CacheBypass)) for result, _ in results
         )
+        bypasses = [
+            (result, diagnostic)
+            for result, diagnostic in results
+            if isinstance(result, CacheBypass)
+        ]
+        assert len(sharing_failures) == len(bypasses)
+        assert all(error in {5, 32} for error in sharing_failures)
+        for result, diagnostics in bypasses:
+            assert isinstance(result.reason, CacheLocationError)
+            assert len(diagnostics) == len(diagnostics[-1].failures) == 1
+            assert diagnostics[-1].failures[0].problem.kind is CacheStorageError
+            assert "publish" in diagnostics[-1].failures[0].problem.message
+    else:
+        assert all(isinstance(result, CacheMiss) for result, _ in results)
+    for result, _ in results:
+        namespace = {}
+        exec(result.code, namespace)
+        assert namespace["answer"] == 42
     cache = GeneratedCodeCache(directory, enabled=True, memory_capacity=0)
     assert isinstance(
         cache.get(cache_request, lambda: pytest.fail("must reuse complete entry")),

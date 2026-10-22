@@ -1,0 +1,277 @@
+{
+  "schema": "yidl-cache.windows-remediation1.v1",
+  "date": "2026-10-23",
+  "status": "uncommitted correction; both findings await independent re-verdicts",
+  "reviewed_cache": "6d91a0cec59bb926e4ffb627847a6e1562b0dc9e",
+  "lifecycle_reference": "e979f2412b809e2a8a60eefb942790cef1e715ff",
+  "astichi_reference": "ce47c629973d8e5a6340ceaa89b0bc3e8788d5fe",
+  "yidl_runtime_reference": "ee5ded0854aa5b1fc0ddfa7213b765009b63bb95",
+  "package_source_sha256": {
+    "src/yidl_cache/__init__.py": "f8b1871fa6cbfee324a4d43b2ea35d99b437c418b82e5eb0952028c0b591b0d8",
+    "src/yidl_cache/cache.py": "a74b10352c1f0ef06636fbc750149fbe6c763c9df324823a1b265b70a0edf7f2",
+    "src/yidl_cache/diagnostics.py": "92337545446eb168d6191eb408fd55aafa0a6e471c38a5b4a4b417ad59e37f85",
+    "src/yidl_cache/locations.py": "6806bbdd91d6a1bb0a7d1aa3190bd537ba8bae339f1197dff145e60cdd90230b",
+    "src/yidl_cache/model.py": "64e9d8a247c683288ca3d4af432eafaf98a9905b5447e119f4512362ab719f68",
+    "src/yidl_cache/storage.py": "0630485a126af641613a319f0520c5525dc03892fe685ecba6aee1955d791afe",
+    "src/yidl_cache/trust.py": "6ba903a301485007152e9eed84a29dc108d873f77e0624540d262cedf980e5bf",
+    "src/yidl_cache/windows_api.py": "a50cc95931c2c8d0788e916ea06c5043c230a52908a24efe8af398d6e3c033f3",
+    "src/yidl_cache/windows_storage.py": "4e0d0248132577002958071ab25942239ff09a64649d562b4e5e321445a39ba2"
+  },
+  "cache_test_sha256": {
+    "tests/conftest.py": "56a47e58d0352a8fc9bb07a65975e17971c33f6d26f3aff9c89e9b596e74902d",
+    "tests/fixtures/record_process.py": "bf5160d65c1bf5205739aa700f9076312cc8f97aa72fd4558b060af57179f8e2",
+    "tests/test_artifact_failures.py": "9c3d67054ef42102e715eb1f6599a990fbdb727c62472d1b9235b7d24f8998f4",
+    "tests/test_generated_code_cache.py": "a189a0820165f1c30ac8a7320cb648ec70fdf775a4a11641e5070c450401fb64",
+    "tests/test_location_failures.py": "c91ba5118992cc35e0d68480d572a178a2e530b251b4b5da360f6945396f2838",
+    "tests/test_locations.py": "29090c729db943076b9b1ceed9b34dd4ae44ceb31cfe261bf9dcd3830f3fd854",
+    "tests/test_windows_publication.py": "d48ebee7e5b16c4489db91546da5735c058b35e0b7f6bf1a1f7008b804d5a13e",
+    "tests/test_windows_roots.py": "e89ec47a1da46afda0dcefd807ec9404e7575780cfdf46957072398fdb272329",
+    "tests/test_windows_storage.py": "d0e0356c589ccf950ed4159e8da812d19107be301a08acc33d916a496dd6092c"
+  },
+  "red_runtime_sha256": {
+    "src/yidl_cache/__init__.py": "f8b1871fa6cbfee324a4d43b2ea35d99b437c418b82e5eb0952028c0b591b0d8",
+    "src/yidl_cache/cache.py": "a74b10352c1f0ef06636fbc750149fbe6c763c9df324823a1b265b70a0edf7f2",
+    "src/yidl_cache/diagnostics.py": "92337545446eb168d6191eb408fd55aafa0a6e471c38a5b4a4b417ad59e37f85",
+    "src/yidl_cache/locations.py": "6806bbdd91d6a1bb0a7d1aa3190bd537ba8bae339f1197dff145e60cdd90230b",
+    "src/yidl_cache/model.py": "64e9d8a247c683288ca3d4af432eafaf98a9905b5447e119f4512362ab719f68",
+    "src/yidl_cache/storage.py": "0630485a126af641613a319f0520c5525dc03892fe685ecba6aee1955d791afe",
+    "src/yidl_cache/trust.py": "6ba903a301485007152e9eed84a29dc108d873f77e0624540d262cedf980e5bf",
+    "src/yidl_cache/windows_api.py": "2e8af0a5de16d7e35774a23d5fcdc3c3cd5cacbcdd17b8beb1a2dedfe0725d98",
+    "src/yidl_cache/windows_storage.py": "1a5ef4e6d8a3ea8927f01d970c77244d02cbd3453c2d4df3568a0a02b4ae954c"
+  },
+  "original_counterexamples": {
+    "Code P2-1": {
+      "before": "physical bypass; substituted route reached forbidden unmarshalling",
+      "after": "authoritative alias typed bypass before decode; independent trusted home miss then generation-forbidden hit",
+      "mapping": "unused current-user Z: created and removed in both runs; identity checked before deletion",
+      "producer_calls_per_request": 1
+    },
+    "State P3-1": {
+      "before": "one real miss and one real typed bypass fail two-miss assertion",
+      "after": "deterministic exclusive-handle miss/bypass pair accepted; valid generated code and fresh forbidden-generation hit",
+      "native_open_target_error": 5,
+      "allowed_controlled_rename_errors": [
+        5,
+        32
+      ],
+      "sharing_flags_changed": false
+    }
+  },
+  "platform_results": {
+    "windows_cache": {
+      "passed": 69,
+      "skipped": 17
+    },
+    "windows_lifecycle_python": {
+      "passed": 45,
+      "skipped": 2
+    },
+    "windows_lifecycle_native-rust": {
+      "passed": 45,
+      "skipped": 2
+    },
+    "mac_cache": {
+      "passed": 57,
+      "skipped": 29,
+      "python": "3.14.3"
+    },
+    "linux_cache": {
+      "passed": 55,
+      "skipped": 31,
+      "python": "3.13.5"
+    }
+  },
+  "qualified_windows_source": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+    "source_sha256": {
+      "__init__.py": "f8b1871fa6cbfee324a4d43b2ea35d99b437c418b82e5eb0952028c0b591b0d8",
+      "cache.py": "a74b10352c1f0ef06636fbc750149fbe6c763c9df324823a1b265b70a0edf7f2",
+      "diagnostics.py": "92337545446eb168d6191eb408fd55aafa0a6e471c38a5b4a4b417ad59e37f85",
+      "locations.py": "6806bbdd91d6a1bb0a7d1aa3190bd537ba8bae339f1197dff145e60cdd90230b",
+      "model.py": "64e9d8a247c683288ca3d4af432eafaf98a9905b5447e119f4512362ab719f68",
+      "storage.py": "0630485a126af641613a319f0520c5525dc03892fe685ecba6aee1955d791afe",
+      "trust.py": "6ba903a301485007152e9eed84a29dc108d873f77e0624540d262cedf980e5bf",
+      "windows_api.py": "a50cc95931c2c8d0788e916ea06c5043c230a52908a24efe8af398d6e3c033f3",
+      "windows_storage.py": "4e0d0248132577002958071ab25942239ff09a64649d562b4e5e321445a39ba2"
+    },
+    "lifecycle_src_sha256": {
+      "src/yidl_lifecycle/__init__.py": "cc6f5096501633f03dcb48843f7f8c408462ab2f04074eec5fd1c6fc942a67f6",
+      "src/yidl_lifecycle/_generated_lifecycle_base.py": "fb1e52404b394b9401d18f887356ac02ee132f4d28fc713759ffcdceb0b1bb22",
+      "src/yidl_lifecycle/bindings.py": "68c476c6a19fa6efeb8870b372b386deddf9e1d671c1f4f8e0bf1b5fb0b4b31d",
+      "src/yidl_lifecycle/bindings_refcount.py": "5ad261d41095192e69de0d52913bb29b6e0c8f975186e08ecbe45d57ac19a709",
+      "src/yidl_lifecycle/lifecycle.py": "c6a79db6378e70a1622587dfdfdb71acd63707a3a3c00e0767f5547e42f17484",
+      "src/yidl_lifecycle/lifecycle_cache_configuration.py": "06cdaab0121848dbb0d9456dc9a1cb8be39e02b9419040e481896738bdf68000",
+      "src/yidl_lifecycle/lifecycle_cache_inputs.py": "d8d3d5badc3168ab5ef7fd7a829c5de0e9c761c878b87fde979155e2d962add7",
+      "src/yidl_lifecycle/lifecycle_code_cache.py": "5be9490510b379a11fd136f9deddddced141bf3768e1f5b488ca2454777754ad",
+      "src/yidl_lifecycle/lifecycle_harvester.py": "4c76387f9eb1a2af4027ff00fc28dfd4badeeecd9fcbb2e7a49613dde5288e89",
+      "src/yidl_lifecycle/lifecycle_markers.py": "6b08836f9008f1bfc92555561248a6787420d161bf7c6cbcc75bfd7eec5d9229",
+      "src/yidl_lifecycle/regenerate_lifecycle_base.py": "7af8949dd5fe499f24465c1c7cadd1ba162667930786b739b79219645a99fa07",
+      "src/yidl_lifecycle/transaction_yidl.py": "9fbf8e6a8ea65aaf916dacf51b26acb8d7bbd32da00a0da63084d375a87d978a"
+    },
+    "reference_sources": {
+      "astichi": {
+        "revision": "ce47c629973d8e5a6340ceaa89b0bc3e8788d5fe",
+        "src_matches": true
+      },
+      "yidl": {
+        "revision": "ee5ded0854aa5b1fc0ddfa7213b765009b63bb95",
+        "src_matches": true
+      }
+    }
+  },
+  "refs_source_to_ntfs_home_engine_proofs": [
+    {
+      "requested": "python",
+      "warm": false,
+      "selection": {
+        "requested_engine": "python",
+        "selected_engine": "python",
+        "fallback_scope": null,
+        "reason_key": null,
+        "reason_detail": null
+      },
+      "native_calls": {},
+      "producer_imports": [
+        "yidl.generation.data_def_sys",
+        "astichi",
+        "yidl_lifecycle._generated_lifecycle_base"
+      ],
+      "storage_sha256": "0630485a126af641613a319f0520c5525dc03892fe685ecba6aee1955d791afe",
+      "routes": [
+        {
+          "selected": "MirroredSourceLocation",
+          "failures": [
+            "Windows cache requires local NTFS with persistent ACLs"
+          ]
+        },
+        {
+          "selected": "MirroredSourceLocation",
+          "failures": [
+            "Windows cache requires local NTFS with persistent ACLs"
+          ]
+        }
+      ]
+    },
+    {
+      "requested": "python",
+      "warm": true,
+      "native_calls": {},
+      "producer_imports": [],
+      "storage_sha256": "0630485a126af641613a319f0520c5525dc03892fe685ecba6aee1955d791afe",
+      "routes": [
+        {
+          "selected": "MirroredSourceLocation",
+          "failures": [
+            "Windows cache requires local NTFS with persistent ACLs"
+          ]
+        },
+        {
+          "selected": "MirroredSourceLocation",
+          "failures": [
+            "Windows cache requires local NTFS with persistent ACLs"
+          ]
+        }
+      ]
+    },
+    {
+      "requested": "native-rust",
+      "warm": false,
+      "selection": {
+        "requested_engine": "native-rust",
+        "selected_engine": "native-rust",
+        "fallback_scope": null,
+        "reason_key": null,
+        "reason_detail": null
+      },
+      "native_sha256": "db81f125ed30c3b39eea2160c2f296493b2aee59ff712f187e9aa540d3572da6",
+      "native_calls": {
+        "_astichi_native_engine.capabilities": 1101,
+        "_astichi_native_engine.compile_validate_source": 95,
+        "_astichi_native_engine.engine_create": 3,
+        "_astichi_native_engine.register_surface_bundle": 3,
+        "_astichi_native_engine.register_template_package_v2_source": 237,
+        "_astichi_native_engine.lower_template_package_v2_from_registered_template": 95,
+        "_astichi_native_engine.engine_snapshot": 2,
+        "_astichi_native_engine.assembly_state_create": 2,
+        "_astichi_native_engine.assembly_state_append_occurrence": 2,
+        "_astichi_native_engine.assembly_state_apply_request_batch": 329,
+        "_astichi_native_engine.assembly_state_materialize_to_python_ast": 2
+      },
+      "producer_imports": [
+        "yidl.generation.data_def_sys",
+        "astichi",
+        "yidl_lifecycle._generated_lifecycle_base"
+      ],
+      "storage_sha256": "0630485a126af641613a319f0520c5525dc03892fe685ecba6aee1955d791afe",
+      "routes": [
+        {
+          "selected": "MirroredSourceLocation",
+          "failures": [
+            "Windows cache requires local NTFS with persistent ACLs"
+          ]
+        },
+        {
+          "selected": "MirroredSourceLocation",
+          "failures": [
+            "Windows cache requires local NTFS with persistent ACLs"
+          ]
+        }
+      ]
+    },
+    {
+      "requested": "native-rust",
+      "warm": true,
+      "native_calls": {},
+      "producer_imports": [],
+      "storage_sha256": "0630485a126af641613a319f0520c5525dc03892fe685ecba6aee1955d791afe",
+      "routes": [
+        {
+          "selected": "MirroredSourceLocation",
+          "failures": [
+            "Windows cache requires local NTFS with persistent ACLs"
+          ]
+        },
+        {
+          "selected": "MirroredSourceLocation",
+          "failures": [
+            "Windows cache requires local NTFS with persistent ACLs"
+          ]
+        }
+      ]
+    }
+  ],
+  "raw_log_sha256": {
+    "original_counterexamples_red": "387aff10d1160f5b0fdf999e709b3870ed265f64fa6cf1efc1bca353467f6de2",
+    "focused_green": "64cf6024d62abd084a000a96b787e7f529fd9d842919d0b3064303142f02cc18",
+    "windows_full_green": "6f9baacab383fc12f25443bc78496a118f8e4d4373565f13d895a1f45e681add",
+    "held_handle_api_probe": "60377d63dc43401ce97ab8c27dd2bfb387eeac7e79d08842d8ca0684a9528f9a",
+    "lifecycle_python": "6268e989fcbc0f78c12e9e18cbcb2312fa7fe10743b5a0ece61939d3e25ec25d",
+    "lifecycle_native": "4983f6b5c68e4f95884df5da1fa2165c1b09950b86c9c7fa60785ce90c17b573",
+    "refs_source_ntfs_home": "2980ce1814aa6bb77d277ba09484469b35b02ed140c29366ceab8360bd2c84c2",
+    "linux_preservation": "6b600349b6dada028a2a5d32b3ff00a160663a65446bfac65e876a66fa0ab617"
+  },
+  "preserved_report_prompt_checkpoint_and_initial_evidence_sha256": {
+    "WindowsPersistence-ReviewCheckpoint.md": "6ab17a278eaeb30ec9ada6744e62303bdcc0b632d8779a8d5f6575add1149b43",
+    "WindowsPersistence-ReviewCode.md": "314fa92e17cfaaea126d374d198611481b6651641a7463f3c5e92f3f87e736da",
+    "WindowsPersistence-ReviewState.md": "7033371008bb47df079a7e5e0d7405ae32227cac0dbc62159af9e81a6b04823c",
+    "WindowsPersistence-PromptCode.md": "6384ccf3a642635698bc927800f033d9c399cc24129ff227e63e66671185f01a",
+    "WindowsPersistence-PromptState.md": "a90b2992615bc2275f6485b79470323bac5d49d1288b3f4fc9ba5c42c93a1baa",
+    "WindowsPersistenceEvidence.json": "361805bb3e0630c4004bb25f3c65e29b10ba0f27a374561ee24f4e7ec8294563"
+  },
+  "checks": {
+    "black": "passed",
+    "diff_whitespace": "passed",
+    "ast_files": 20,
+    "consumer_import_boundary": "passed",
+    "shared_codec_dispatch_and_posix_source": "identical to reviewed cache object",
+    "lifecycle_repository": "no remediation edits"
+  },
+  "premise_accounting": "local held-anchor invariant guard; no shared-interface, architecture, wire, routing, generation, mutation-boundary or protected-publication redesign",
+  "limitations": [
+    "Windows 11 AMD64 CPython 3.13.5 qualification only",
+    "Directory-backed or unprovable roots bypass; not substituted-drive support",
+    "ReFS persistence unsupported; actual ReFS-source to NTFS-home cold/warm proof retained",
+    "Independent Code/State closure decisions remain pending; no commit or release performed"
+  ]
+}

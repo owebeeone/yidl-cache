@@ -81,7 +81,13 @@ access. If inspection is unavailable, persistence bypasses.
 
 Windows persistence supports fixed local NTFS volumes with persistent ACLs and
 the required system APIs. It uses ordinary drive-letter paths, including long
-paths. ReFS, FAT, network shares, removable drives, device/extended namespace
+paths. The held drive anchor must resolve to an actual volume root, verified by
+its normalized volume-GUID path before admission, traversal, reading, or
+maintenance. Directory-backed substituted drives and roots whose identity
+cannot be established bypass; they cannot hide physical ancestry behind a drive
+letter. Validation does not reopen a canonicalized pathname.
+
+ReFS, FAT, network shares, removable drives, device/extended namespace
 prefixes, alternate streams, parent traversal, and ambiguous trailing dots/spaces
 bypass. A source file may live on an unsupported volume: automatic placement can
 still use a trusted NTFS home fallback. An explicit unsupported root remains

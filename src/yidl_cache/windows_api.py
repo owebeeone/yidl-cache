@@ -115,6 +115,15 @@ class WindowsApi:
         self._bind(self.kernel, "GetDriveTypeW", w.UINT, w.LPCWSTR)
         self._bind(
             self.kernel,
+            "GetFinalPathNameByHandleW",
+            w.DWORD,
+            w.HANDLE,
+            w.LPWSTR,
+            w.DWORD,
+            w.DWORD,
+        )
+        self._bind(
+            self.kernel,
             "GetFileInformationByHandle",
             w.BOOL,
             w.HANDLE,
