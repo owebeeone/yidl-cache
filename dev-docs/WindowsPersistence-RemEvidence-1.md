@@ -150,3 +150,20 @@ architectures, impersonation, ReFS storage, performance, crash/power-loss testin
 full consumer matrices, and release activation are not newly qualified. This
 patch is prepared for the lane owner to settle and for the original reviewers to
 issue focused re-verdicts; it does not itself change the review gate.
+
+## Subsequent lane-owner audit correction
+
+The implementation evidence above records the handoff before commit/re-verdict.
+Both final reports subsequently returned GO at cache
+`aaa55ffba0f1cf63089da313fdf4e8316501a505` and Lifecycle
+`e979f2412b809e2a8a60eefb942790cef1e715ff`; see the
+[settled checkpoint](WindowsPersistence-ReviewCheckpoint.md).
+
+State P3-2 identified that the owner-maintained checkpoint had changed since its
+preservation snapshot. The JSON now explicitly pins all six preserved audit
+entries to their retrievable `aaa55ffba0f1cf63089da313fdf4e8316501a505` Git
+objects under `dev-docs`, with the checkpoint digest corrected for that object.
+All six were recalculated and match. Runtime/test hash groups and platform/RED
+results are unchanged, as are the original reports/prompts and initial manifest.
+This metadata-only correction requires no repeat of the product test matrix and
+does not rewrite the original State report or claim a further reviewer verdict.

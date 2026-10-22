@@ -1,7 +1,9 @@
 # Windows persistence settled-checkpoint review
 
-Date: 2026-10-23. Status: **NO-GO at the initial settled checkpoint; first
-bounded correction verified by the implementer, independent re-verdicts pending**.
+Date: 2026-10-23. Status: **accepted at cache
+`aaa55ffba0f1cf63089da313fdf4e8316501a505` and Lifecycle
+`e979f2412b809e2a8a60eefb942790cef1e715ff` after Code and State re-verdicts
+reported GO; this accepts the bounded Windows persistence amendment only**.
 
 ## Authority and authorized boundary
 
@@ -98,3 +100,43 @@ closed by this implementation-status update.
 
 This checkpoint grants no registry publication, deployment, performance claim,
 new platform qualification or broader release acceptance.
+
+## Final re-verdict and bounded acceptance
+
+| Round | Cache checkpoint | Lifecycle checkpoint | Code | State | Combined |
+| --- | --- | --- | --- | --- | --- |
+| Initial | `6d91a0cec59bb926e4ffb627847a6e1562b0dc9e` | `e979f2412b809e2a8a60eefb942790cef1e715ff` | NO-GO, P2-1 | GO, P3-1 | NO-GO |
+| First remediation | `aaa55ffba0f1cf63089da313fdf4e8316501a505` | unchanged | [GO; P2-1 closed](WindowsPersistence-ReviewCode-2.md) | [GO; P3-1 closed](WindowsPersistence-ReviewState-2.md) | GO/GO |
+
+Both original reviewers independently verified the same starting/ending tuple
+and retraced the original counterexamples. Neither found a new architectural
+root or materially changed review premise. Full reviews: two revisions, exactly
+two reviewers each. Remediation rounds used: one of two. Blocking findings open:
+zero. The initial distinct findings both received closure; the second round
+also independently confirmed the root guard across both axes.
+
+State identified one new nonblocking P3-2: the owner-maintained checkpoint had
+changed after the implementer's preservation snapshot. This did not invalidate
+runtime/test hashes. The audit-only correction now pins all six preservation
+entries in the remediation JSON to the retrievable object at cache
+`aaa55ffba0f1cf63089da313fdf4e8316501a505`, with the checkpoint digest corrected
+for that object. The lane owner recomputed all six and verified exact matches.
+Historical original reports, prompts, initial evidence and runtime/test result
+groups remain unchanged. This is a documented metadata correction, not a second
+product-remediation round or a claim that the State report was edited/reissued.
+
+Round-two canonical continuation prompts are filed as
+[Code](WindowsPersistence-PromptCode-2.md) and
+[State](WindowsPersistence-PromptState-2.md); both final reports are verbatim.
+Later audit-only commits may update this checkpoint and the index without
+changing the accepted runtime tuple or retroactively changing either report.
+
+Accepted scope is the Windows storage/trust implementation and necessary
+Lifecycle cache-integration overlay. Reported runtime qualification remains
+Windows 11 AMD64/CPython 3.13.5, with the recorded Mac/Linux preservation and
+explicit Python/native-Rust Lifecycle fresh-process proofs. NTFS storage is
+bounded; unsupported roots/filesystems bypass, with ReFS-source to ordinary
+NTFS-home fallback verified. Other Windows versions/architectures, impersonation,
+ReFS persistence, power-loss durability, performance and public release remain
+outside this acceptance. Reviewers independently inspected sources/evidence;
+they did not independently rerun the real-platform tests.

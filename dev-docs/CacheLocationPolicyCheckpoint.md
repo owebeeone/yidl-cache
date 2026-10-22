@@ -5,11 +5,15 @@
 The operator subsequently authorized closing the Windows persistence
 implementation gap. The [bounded amendment](WindowsPersistence.md) records the
 new NTFS trust/handle implementation and actual Windows verification, separately
-from the original accepted specification and review tuple below. Its runtime
-draft and cache-only Lifecycle test changes are uncommitted; the earlier reviews
-do not accept them. ReFS storage remains unsupported, with verified automatic
-NTFS home fallback for ReFS source files. No publication or release acceptance
-is claimed.
+from the original accepted specification and review tuple below. The Windows
+amendment is now **accepted at cache
+`aaa55ffba0f1cf63089da313fdf4e8316501a505` and Lifecycle
+`e979f2412b809e2a8a60eefb942790cef1e715ff` after independent Code/State GO**;
+the [settled review checkpoint](WindowsPersistence-ReviewCheckpoint.md) records
+the initial findings, bounded correction, exact closure evidence and limits.
+The historical reviews below do not accept the later Windows amendment. ReFS
+storage remains unsupported, with verified automatic NTFS home fallback for
+ReFS source files. No registry publication or broader release acceptance is claimed.
 
 ## Authority And Scope
 

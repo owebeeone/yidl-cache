@@ -1,7 +1,8 @@
 # Windows persistence remediation — round 1
 
-Date: 2026-10-23. Status: **implementation and verification complete;
-independent re-verdicts pending**.
+Date: 2026-10-23. Status: **completed; both original findings independently
+verified closed at cache `aaa55ffba0f1cf63089da313fdf4e8316501a505` and
+Lifecycle `e979f2412b809e2a8a60eefb942790cef1e715ff`**.
 
 ## Authority, settled object and boundary
 
@@ -84,9 +85,14 @@ the existing complete-ancestry premise. The lane owner will settle the revised
 tuple for focused re-verdicts by the original two reviewers.
 
 Initial full review: one revision, two independent axes. Remediation rounds
-started: one of at most two. Blocking findings open: one. Nonblocking findings
-open: one. Reviewer-classified architectural roots: no new classification beyond
-the filed root-premise defect is asserted by the lane owner.
+used: one of at most two. Blocking findings open: zero. Both original findings
+were closed by their originating reviewers; see the final
+[Code](WindowsPersistence-ReviewCode-2.md) and
+[State](WindowsPersistence-ReviewState-2.md) reports. Neither classified a new
+architectural root or materially changed review premise. A new nonblocking State
+P3-2 concerning an audit snapshot digest received the metadata-only correction
+recorded in the [checkpoint](WindowsPersistence-ReviewCheckpoint.md); runtime and
+test evidence are unchanged.
 
 The original commit/push authorization covers recording a corrected reviewable
 checkpoint and its audit evidence through GWZ. Do not push or claim acceptance

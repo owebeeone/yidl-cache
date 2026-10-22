@@ -252,7 +252,7 @@
     "linux_preservation": "6b600349b6dada028a2a5d32b3ff00a160663a65446bfac65e876a66fa0ab617"
   },
   "preserved_report_prompt_checkpoint_and_initial_evidence_sha256": {
-    "WindowsPersistence-ReviewCheckpoint.md": "6ab17a278eaeb30ec9ada6744e62303bdcc0b632d8779a8d5f6575add1149b43",
+    "WindowsPersistence-ReviewCheckpoint.md": "87c691710303a5a14d08d613f9dfc8c1fe493306d7711182208f691057b7a76d",
     "WindowsPersistence-ReviewCode.md": "314fa92e17cfaaea126d374d198611481b6651641a7463f3c5e92f3f87e736da",
     "WindowsPersistence-ReviewState.md": "7033371008bb47df079a7e5e0d7405ae32227cac0dbc62159af9e81a6b04823c",
     "WindowsPersistence-PromptCode.md": "6384ccf3a642635698bc927800f033d9c399cc24129ff227e63e66671185f01a",
@@ -273,5 +273,13 @@
     "Directory-backed or unprovable roots bypass; not substituted-drive support",
     "ReFS persistence unsupported; actual ReFS-source to NTFS-home cold/warm proof retained",
     "Independent Code/State closure decisions remain pending; no commit or release performed"
-  ]
+  ],
+  "preserved_audit_object_revision": "aaa55ffba0f1cf63089da313fdf4e8316501a505",
+  "preserved_audit_object_directory": "dev-docs",
+  "audit_digest_correction": {
+    "finding": "State P3-2",
+    "scope": "Audit metadata only; runtime/test results, original reports/prompts and initial evidence are unchanged.",
+    "previous_unqualified_checkpoint_digest": "6ab17a278eaeb30ec9ada6744e62303bdcc0b632d8779a8d5f6575add1149b43",
+    "resolution": "Each preservation entry identifies bytes at preserved_audit_object_revision under preserved_audit_object_directory. The owner checkpoint may change in later audit-only commits."
+  }
 }
