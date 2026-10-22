@@ -21,8 +21,8 @@ from yidl_cache import (
 )
 
 pytestmark = pytest.mark.skipif(
-    sys.platform not in {"darwin", "linux"},
-    reason="persistent trust requires macOS/Linux",
+    sys.platform not in {"darwin", "linux", "win32"},
+    reason="unsupported storage trust platform",
 )
 
 
@@ -30,6 +30,7 @@ def code_for(request):
     return compile("value = 7", request.compilation.filename, "exec", dont_inherit=True)
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX descriptor I/O injection")
 @pytest.mark.parametrize("stage", ["open", "read"])
 def test_local_read_io_failure_uses_existing_home_without_generation(
     tmp_path, cache_request, monkeypatch, stage

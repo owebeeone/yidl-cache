@@ -13,12 +13,15 @@ import re
 import stat
 import struct
 from types import CodeType
-from typing import Iterator
+from typing import TYPE_CHECKING, Iterator
 
 from yidl_cache.model import CacheArtifactError
 from yidl_cache.model import CacheStorageError
 from yidl_cache.model import json_bytes
 from yidl_cache.trust import require_no_extended_acl
+
+if TYPE_CHECKING:
+    from yidl_cache.windows_storage import WindowsStorage
 
 _MAGIC = b"YIDLCACHE\x01"
 _HEADER_LIMIT = 16 * 1024
@@ -80,6 +83,21 @@ class ArtifactStorage:
                 os.close(descriptor)
 
     def read(self, key: str, identity: dict[str, object]) -> ReadResult:
+        if os.name == "nt":
+            try:
+                data = self._windows().read(
+                    key + ".ycode",
+                    len(_MAGIC) + 4 + _HEADER_LIMIT + self.max_payload_bytes,
+                )
+                return (
+                    ReadResult()
+                    if data is None
+                    else ReadResult(code=self._decode(data, identity))
+                )
+            except CacheArtifactError as error:
+                return ReadResult(rejection=error)
+            except OSError as error:
+                raise CacheStorageError("cannot read Windows cache storage") from error
         with self._directory() as directory:
             descriptor = None
             try:
@@ -129,6 +147,14 @@ class ArtifactStorage:
 
     def admit(self) -> None:
         """Test private writable storage without overwriting an existing entry."""
+        if os.name == "nt":
+            try:
+                self._windows().admit()
+                return
+            except OSError as error:
+                raise CacheStorageError(
+                    "cannot probe private Windows cache directory"
+                ) from error
         with self._directory() as directory:
             name = ".probe-" + os.urandom(12).hex() + ".tmp"
             created = False
@@ -228,6 +254,12 @@ class ArtifactStorage:
         if len(header) > _HEADER_LIMIT:
             raise CacheArtifactError("cache identity exceeds the header bound")
         artifact = _MAGIC + struct.pack(">I", len(header)) + header + payload
+        if os.name == "nt":
+            try:
+                self._windows().write(key + ".ycode", artifact)
+                return
+            except OSError as error:
+                raise CacheStorageError("cannot publish Windows cache entry") from error
         with self._directory() as directory:
             temporary = key + ".ycode." + os.urandom(12).hex() + ".tmp"
             try:
@@ -261,6 +293,13 @@ class ArtifactStorage:
                     ) from error
 
     def clear(self) -> int:
+        if os.name == "nt":
+            try:
+                return self._windows().clear(_ENTRY_NAME, _PROBE_NAME)
+            except OSError as error:
+                raise CacheStorageError(
+                    "cannot maintain private Windows cache directory"
+                ) from error
         try:
             self.directory.lstat()
         except FileNotFoundError:
@@ -282,6 +321,18 @@ class ArtifactStorage:
                     except FileNotFoundError:
                         pass
             return removed
+
+    def _windows(self) -> WindowsStorage:
+        try:
+            from yidl_cache.windows_storage import WindowsStorage
+            from yidl_cache.windows_api import api
+
+            api()
+        except (ImportError, OSError, AttributeError) as error:
+            raise CacheStorageError(
+                "Windows storage trust APIs are unavailable"
+            ) from error
+        return WindowsStorage(self.directory)
 
 
 def _check_constants(value: object, depth: int = 0) -> None:

@@ -26,7 +26,8 @@ from yidl_cache import GeneratedCodeCache
 from yidl_cache import storage
 
 pytestmark = pytest.mark.skipif(
-    os.name != "posix", reason="persistent trust checks are POSIX-only"
+    sys.platform not in {"darwin", "linux", "win32"},
+    reason="unsupported storage trust platform",
 )
 
 
@@ -110,6 +111,7 @@ def test_rejects_non_code_payload(
     assert isinstance(result.rejected_entry, CacheArtifactError)
 
 
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file/permission mechanics")
 def test_refuses_nonprivate_directory(
     tmp_path: Path, cache_request: CacheRequest
 ) -> None:
@@ -124,6 +126,7 @@ def test_refuses_nonprivate_directory(
     assert list(directory.iterdir()) == []
 
 
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file/permission mechanics")
 @pytest.mark.parametrize("parent_link", [False, True])
 def test_refuses_symlink_directory_components(
     tmp_path: Path,
@@ -143,6 +146,7 @@ def test_refuses_symlink_directory_components(
     assert list(target.iterdir()) == []
 
 
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file/permission mechanics")
 def test_symlink_entry_is_replaced_without_reading_its_target(
     tmp_path: Path,
     cache_request: CacheRequest,
@@ -161,6 +165,7 @@ def test_symlink_entry_is_replaced_without_reading_its_target(
     assert outside.read_bytes() == before
 
 
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file/permission mechanics")
 def test_failed_atomic_replace_cleans_temporary_file(
     tmp_path: Path,
     cache_request: CacheRequest,
@@ -235,6 +240,7 @@ def test_clear_keeps_unrelated_files(
     assert unrelated.read_text(encoding="utf-8") == "keep"
 
 
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file/permission mechanics")
 def test_fifo_entry_cannot_block_lookup(
     tmp_path: Path,
     cache_request: CacheRequest,

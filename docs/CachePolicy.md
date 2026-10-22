@@ -77,8 +77,57 @@ or hard links. Nonblocking opens prevent special files from hanging a lookup.
 Extended ACLs are conservatively rejected, even when the mode bits look private.
 macOS inspection uses its system ACL API via standard-library `ctypes`; Linux
 inspection checks ACL attributes through descriptor-based extended-attribute
-access. If inspection is unavailable, persistence bypasses. Windows and other
-platforms currently bypass persistence; their trust policies are not implemented.
+access. If inspection is unavailable, persistence bypasses.
+
+Windows persistence supports fixed local NTFS volumes with persistent ACLs and
+the required system APIs. It uses ordinary drive-letter paths, including long
+paths. ReFS, FAT, network shares, removable drives, device/extended namespace
+prefixes, alternate streams, parent traversal, and ambiguous trailing dots/spaces
+bypass. A source file may live on an unsupported volume: automatic placement can
+still use a trusted NTFS home fallback. An explicit unsupported root remains
+authoritative and bypasses rather than silently selecting another root.
+
+Cache directories and entries must have a trusted owner and a non-null DACL.
+Effective allow entries may grant access only to the current token's user,
+LocalSystem, or built-in Administrators. OWNER RIGHTS is accepted only after
+verifying the owner. Both explicit and inherited ordinary allow/deny entries are
+supported; an unsafe allow is rejected even if a deny appears to cancel it.
+Unknown effective ACE forms bypass. Inherit-only entries are not effective on
+the object being checked. Existing ACLs are never repaired. New directories,
+probes, and temporary entries receive an explicit protected DACL granting full
+access to the user, LocalSystem, and Administrators, without inheriting broader
+access from their parent.
+
+Every ancestor must also have a trusted owner and must not delegate DACL or
+ownership control to an untrusted principal. Ancestors additionally recognize
+the Windows Modules Installer (TrustedInstaller) service as a system principal;
+this does not admit arbitrary service identities or relax leaf privacy. Public
+data/traversal rights on ancestors are permitted. These checks prevent an
+untrusted ancestor controller from propagating new inherited grants into an
+existing cache object.
+
+Traversal opens one component at a time relative to held directory handles,
+without reparse processing. Ancestors remain open without delete sharing for
+the whole operation. Reparse points, junctions, device objects, and unexpected
+file types are rejected; entries must have exactly one hard link. Entry trust
+and size are checked on the same handle used for reading, which denies write
+and delete sharing until the bounded read finishes. These checks precede envelope
+decoding and unmarshalling. Windows sharing violations are typed storage
+failures and follow the normal fallback/bypass policy.
+
+Windows publication exclusively creates a private same-directory temporary
+entry, flushes its handle, and atomically renames that open object relative to
+the held destination directory. Cleanup and maintenance delete verified objects
+by handle. Maintenance enumerates only the selected directory and never follows
+recognized reparse/hard-link entries or crawls neighboring directories; an unsafe
+recognized object causes a typed maintenance failure. Unrelated names remain,
+including names containing unpaired UTF-16 units.
+
+Unknown platforms, filesystems, ACL forms, or unavailable trust APIs retain a
+conservative typed bypass. The [Windows implementation evidence](../dev-docs/WindowsPersistence.md)
+records the tested platform and remaining qualification limits. This Windows
+amendment follows separate operator authorization; it does not reinterpret the
+earlier macOS/Linux-only acceptance as Windows approval.
 
 The threat model trusts the current user and the system administrator. These
 checks do not protect against a malicious same-user process, a compromised

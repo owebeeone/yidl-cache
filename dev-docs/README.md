@@ -9,6 +9,8 @@ YIDL repository:
   preference, private home fallback, consumer controls, and review gates.
 - [Location implementation checkpoint](CacheLocationPolicyCheckpoint.md):
   accepted specification, implementation progress, and remaining gates.
+- [Windows persistence amendment](WindowsPersistence.md): separately authorized
+  NTFS storage/trust implementation, TDD and real-platform evidence, and limits.
 
 This repository owns the independent cache package. Consumer adapters stay in
 their own projects; YIDL core does not acquire a cache dependency.

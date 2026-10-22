@@ -1,5 +1,16 @@
 # Automatic Cache Location Checkpoint
 
+## Windows Follow-up — 2026-10-23
+
+The operator subsequently authorized closing the Windows persistence
+implementation gap. The [bounded amendment](WindowsPersistence.md) records the
+new NTFS trust/handle implementation and actual Windows verification, separately
+from the original accepted specification and review tuple below. Its runtime
+draft and cache-only Lifecycle test changes are uncommitted; the earlier reviews
+do not accept them. ReFS storage remains unsupported, with verified automatic
+NTFS home fallback for ReFS source files. No publication or release acceptance
+is claimed.
+
 ## Authority And Scope
 
 The operator directed implementation and default-on Lifecycle caching, continuing

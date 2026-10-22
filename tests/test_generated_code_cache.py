@@ -36,7 +36,6 @@ def produce(cache_request: CacheRequest) -> CodeType:
     )
 
 
-@pytest.mark.skipif(os.name != "posix", reason="persistent trust checks are POSIX-only")
 def test_independent_record_fixture_reuses_code_in_a_fresh_process(
     tmp_path: Path,
 ) -> None:
@@ -134,7 +133,6 @@ def test_storage_failure_preserves_generated_code(
     assert occupied.read_text(encoding="utf-8") == "unrelated"
 
 
-@pytest.mark.skipif(os.name != "posix", reason="persistent trust checks are POSIX-only")
 def test_dependency_edit_suppresses_publication_until_restart(
     tmp_path: Path, cache_request: CacheRequest
 ) -> None:
@@ -160,7 +158,6 @@ def test_dependency_edit_suppresses_publication_until_restart(
     )
 
 
-@pytest.mark.skipif(os.name != "posix", reason="persistent trust checks are POSIX-only")
 def test_same_key_reentry_does_not_deadlock(
     tmp_path: Path, cache_request: CacheRequest
 ) -> None:
@@ -176,7 +173,6 @@ def test_same_key_reentry_does_not_deadlock(
     assert isinstance(inner_results[0].reason, CacheReentryError)
 
 
-@pytest.mark.skipif(os.name != "posix", reason="persistent trust checks are POSIX-only")
 def test_different_key_recursion_is_allowed(
     tmp_path: Path, cache_request: CacheRequest
 ) -> None:
@@ -191,7 +187,6 @@ def test_different_key_recursion_is_allowed(
     assert cache.statistics.misses == 2
 
 
-@pytest.mark.skipif(os.name != "posix", reason="persistent trust checks are POSIX-only")
 def test_concurrent_misses_publish_complete_entries(
     tmp_path: Path, cache_request: CacheRequest
 ) -> None:
@@ -220,7 +215,6 @@ def test_concurrent_misses_publish_complete_entries(
     assert not list(directory.glob("*.tmp"))
 
 
-@pytest.mark.skipif(os.name != "posix", reason="persistent trust checks are POSIX-only")
 def test_memory_cache_is_bounded_and_clear_is_explicit(
     tmp_path: Path, cache_request: CacheRequest
 ) -> None:
@@ -238,7 +232,6 @@ def test_memory_cache_is_bounded_and_clear_is_explicit(
     )
 
 
-@pytest.mark.skipif(os.name != "posix", reason="persistent trust checks are POSIX-only")
 def test_namespace_and_compile_context_are_part_of_the_key(
     tmp_path: Path, cache_request: CacheRequest
 ) -> None:

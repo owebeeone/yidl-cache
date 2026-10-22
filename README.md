@@ -14,6 +14,13 @@ Code and state review accepted the content-pinned implementation draft; see the
 Sequential user-surface review also reports GO, with documentation follow-ups
 recorded in the checkpoint. Cross-platform approval, commits, and publication remain pending.
 
+A separately authorized Windows persistence implementation now supports trusted
+fixed local NTFS storage, with actual Windows cold/warm and fault verification.
+Other filesystems, including ReFS, safely bypass; an automatic NTFS home fallback
+can serve sources on those volumes. See [policy](docs/CachePolicy.md) and the
+[Windows evidence](dev-docs/WindowsPersistence.md). This draft is not release or
+independent implementation-review acceptance.
+
 ## Intended Boundary
 
 The cache stores compatible compiled module code and returns it to a

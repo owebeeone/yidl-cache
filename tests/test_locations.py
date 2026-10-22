@@ -68,8 +68,8 @@ def test_unknown_source_and_long_source_have_bounded_home_layouts(tmp_path):
 
 
 pytestmark = pytest.mark.skipif(
-    sys.platform not in {"darwin", "linux"},
-    reason="persistent trust requires macOS/Linux",
+    sys.platform not in {"darwin", "linux", "win32"},
+    reason="unsupported storage trust platform",
 )
 
 
@@ -101,6 +101,9 @@ def test_routing_only_without_home_generates_once_without_io(tmp_path, cache_req
     assert cache.clear() == 0
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="POSIX permission/syscall mechanics"
+)
 def test_unsafe_local_leaf_falls_back_without_mutating_it(tmp_path, cache_request):
     locations = routes(tmp_path, cache_request.namespace)
     local = locations[0].directory
@@ -180,6 +183,9 @@ def test_all_failed_routes_preserve_reasons_and_bound_diagnostics(
     assert capsys.readouterr() == ("", "")
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="POSIX permission/syscall mechanics"
+)
 def test_permissions_are_rechecked_after_admission(tmp_path, cache_request):
     locations = routes(tmp_path, cache_request.namespace)
     cache = GeneratedCodeCache(enabled=True, memory_capacity=0)
@@ -287,6 +293,9 @@ def test_explicit_empty_route_also_bypasses_previous_memory_hit(
     assert cache.diagnostics[-1].generated
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="POSIX permission/syscall mechanics"
+)
 def test_probe_cleanup_failure_is_bounded_and_maintainable(
     tmp_path, cache_request, monkeypatch
 ):
@@ -313,6 +322,9 @@ def test_probe_cleanup_failure_is_bounded_and_maintainable(
     assert cache.diagnostics == ()
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="POSIX permission/syscall mechanics"
+)
 def test_read_only_local_parent_falls_back_without_permission_repair(
     tmp_path, cache_request
 ):
@@ -334,6 +346,9 @@ def test_read_only_local_parent_falls_back_without_permission_repair(
         parent.chmod(0o700)
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="POSIX permission/syscall mechanics"
+)
 def test_symlink_replacement_after_admission_is_not_followed(tmp_path, cache_request):
     locations = routes(tmp_path, cache_request.namespace)
     cache = GeneratedCodeCache(enabled=True, memory_capacity=0)
