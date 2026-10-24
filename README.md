@@ -2,24 +2,36 @@
 
 Standalone compiled-code artifact cache for code-generating applications.
 
-## Status
+## Status and first use
 
-Initial shared cache implementation, with a fresh-process generated-record
-fixture and focused failure tests. Lifecycle's default-on consumer adapter is now
-implemented in its own project, with
-[measured non-GUI startup gains](../yidl-lifecycle/dev-docs/LifecycleCodeCacheStartup.md).
-Automatic placement is implemented locally against a dual-reviewed specification.
-Code and state review accepted the content-pinned implementation draft; see the
-[checkpoint](dev-docs/CacheLocationPolicyCheckpoint.md) for evidence and gates.
-Sequential user-surface review also reports GO, with documentation follow-ups
-recorded in the checkpoint. Cross-platform approval, commits, and publication remain pending.
+The initial 0.1.0 alpha is being prepared for publication. The cache has an
+independent fresh-process fixture and fault coverage. Current package checks and
+publication order are recorded in the [release process](RELEASE.md) and
+[publishing record](dev-docs/Publishing.md). Earlier implementation checkpoints
+retain their original revisions; they are not a claim of a public release.
 
-A separately authorized Windows persistence implementation now supports trusted
-fixed local NTFS storage, with actual Windows cold/warm and fault verification.
-Other filesystems, including ReFS, safely bypass; an automatic NTFS home fallback
-can serve sources on those volumes. See [policy](docs/CachePolicy.md) and the
-[Windows evidence](dev-docs/WindowsPersistence.md). This draft is not release or
-independent implementation-review acceptance.
+Use CPython 3.12 or newer. Source checks cover Python 3.12–3.14 on macOS; the
+separate [Windows acceptance checkpoint](dev-docs/WindowsPersistence-ReviewCheckpoint.md)
+bounds the fixed-local-NTFS evidence. Unsupported storage safely bypasses.
+Runtime dependencies are limited to Python's standard library.
+
+After publication, install into a consumer environment:
+
+```sh
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install 'yidl-cache==0.1.0'
+```
+
+On Windows PowerShell, activate with `.venv\Scripts\Activate.ps1` instead of
+the second line. Before the initial publication, install the approved wheel
+instead, for example `python -m pip install candidate/yidl_cache-0.1.0-py3-none-any.whl`.
+These registry instructions do not imply that the package has already shipped.
+
+Next, run the [consumer example](#consumer-example) twice to see cold generation
+and warm reuse. Use [troubleshooting](docs/Troubleshooting.md) for bypasses and
+[cache policy](docs/CachePolicy.md) for the full contract. Lifecycle's automatic
+adapter belongs to its [own package](https://github.com/owebeeone/yidl-lifecycle).
 
 ## Intended Boundary
 
@@ -54,7 +66,8 @@ YIDL core remains independent.
 Each consumer owns its input schema, generation callback, execution namespace,
 and live-value binding. Unknown input encodings should bypass, not use arbitrary
 object serialization. See [cache policy](docs/CachePolicy.md) for storage trust,
-invalidation, and platform limitations.
+invalidation, and platform limitations. See [troubleshooting](docs/Troubleshooting.md) for
+interpreting bypass and maintenance diagnostics.
 
 ## Consumer Example
 

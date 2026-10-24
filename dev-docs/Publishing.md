@@ -71,3 +71,15 @@ Commit and review the setup, then run the build-only hosted verification.
 Publish Cache 0.1.0 first, confirm PyPI availability and a fresh registry-only
 install, then proceed to YIDL 0.1.0 and finally Lifecycle 0.1.0. Local checks do
 not themselves authorize publication or qualify new platforms/filesystems.
+
+## User-documentation follow-up
+
+The operator authorized a first-use documentation pass and correctness/readability
+review. The README now distinguishes pre-publication candidate installation from
+after-publication registry commands and routes readers to the existing executable
+consumer example. Status text points to current evidence instead of obsolete
+pending-commit claims. A public troubleshooting guide explains typed bypasses,
+canonical private paths, warm generation checks and bounded maintenance.
+The package's documentation URL points to its owning repository. No cache runtime
+behavior changed in this pass. The example and local documentation links are
+verified; the initial registry-only install remains a publication-time gate.
