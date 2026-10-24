@@ -1,5 +1,10 @@
 # Development Documentation
 
+See [release process](../RELEASE.md) and [publishing preparation](Publishing.md)
+for current packaging, licensing, verified candidate checks and the ordered
+publication gates. Older checkpoint statuses retain their original revisions.
+
+
 The current cross-project plan and input audit are maintained in the neighboring
 YIDL repository:
 

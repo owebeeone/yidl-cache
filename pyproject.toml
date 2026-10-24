@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.24"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
@@ -7,12 +7,14 @@ name = "yidl-cache"
 version = "0.1.0"
 description = "Reusable compiled-code artifact cache for code-generating consumers"
 readme = "README.md"
+license = "LGPL-2.1-only"
+license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = []
 authors = [{ name = "YIDL contributors" }]
 keywords = ["code-generation", "cache", "bytecode"]
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.12",
@@ -23,6 +25,10 @@ classifiers = [
 [project.optional-dependencies]
 dev = ["black==26.3.1", "pytest>=7.0"]
 
+[project.urls]
+Source = "https://github.com/owebeeone/yidl-cache"
+Issues = "https://github.com/owebeeone/yidl-cache/issues"
+
 [tool.uv]
 exclude-newer = "1 week"
 
@@ -30,7 +36,7 @@ exclude-newer = "1 week"
 packages = ["src/yidl_cache"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src/yidl_cache", "tests", "docs", "dev-docs", "AGENTS.md", "README.md", "pyproject.toml"]
+include = ["src/yidl_cache", "tests", "docs", "dev-docs", "AGENTS.md", "README.md", "pyproject.toml", "RELEASE.md", "gearu.toml", ".release.env"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

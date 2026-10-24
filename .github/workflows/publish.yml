@@ -1,0 +1,137 @@
+name: Publish yidl-cache to PyPI
+
+on:
+  release:
+    types: [published]
+  # Manual runs verify the candidate but never upload to PyPI.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yidl-cache-pypi
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Build and verify distributions
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.release.tag_name || github.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.12"
+
+      - name: Require package and release version agreement
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import tomllib
+
+          project = tomllib.loads(Path("pyproject.toml").read_text())["project"]
+          if project["name"] != "yidl-cache":
+              raise SystemExit("Expected the yidl-cache distribution")
+          version = project["version"]
+          tag = os.environ["RELEASE_TAG"]
+          if tag and tag != f"v{version}":
+              raise SystemExit(f"Release tag {tag!r} does not match v{version}")
+          print(f"Verifying yidl-cache {version}")
+          PY
+
+      - name: Build wheel and source distribution
+        run: |
+          python -m pip install build==1.6.1 twine==7.0.0
+          python -m build
+          python -m twine check --strict dist/*
+
+      - name: Verify a fresh wheel installation outside the checkout
+        run: |
+          distribution="$(realpath dist/*.whl)"
+          python -m venv "$RUNNER_TEMP/yidl-cache-wheel"
+          "$RUNNER_TEMP/yidl-cache-wheel/bin/python" -m pip install "$distribution"
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/yidl-cache-wheel/bin/python" -I -c 'import yidl_cache'
+          "$RUNNER_TEMP/yidl-cache-wheel/bin/python" -I \
+            "$GITHUB_WORKSPACE/tests/fixtures/record_process.py" "$RUNNER_TEMP/wheel-cache" 10 no
+          "$RUNNER_TEMP/yidl-cache-wheel/bin/python" -I \
+            "$GITHUB_WORKSPACE/tests/fixtures/record_process.py" "$RUNNER_TEMP/wheel-cache" 99 yes
+
+      - name: Verify a fresh source-distribution installation outside the checkout
+        run: |
+          distribution="$(realpath dist/*.tar.gz)"
+          python -m venv "$RUNNER_TEMP/yidl-cache-sdist"
+          "$RUNNER_TEMP/yidl-cache-sdist/bin/python" -m pip install "$distribution"
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/yidl-cache-sdist/bin/python" -I -c 'import yidl_cache'
+          "$RUNNER_TEMP/yidl-cache-sdist/bin/python" -I \
+            "$GITHUB_WORKSPACE/tests/fixtures/record_process.py" "$RUNNER_TEMP/sdist-cache" 10 no
+          "$RUNNER_TEMP/yidl-cache-sdist/bin/python" -I \
+            "$GITHUB_WORKSPACE/tests/fixtures/record_process.py" "$RUNNER_TEMP/sdist-cache" 99 yes
+
+      - name: Retain the verified distributions
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: yidl-cache-distributions
+          path: dist/*
+          if-no-files-found: error
+
+  test:
+    name: Source tests (Python ${{ matrix.python }})
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13", "3.14"]
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.release.tag_name || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: yidl-cache-distributions
+          path: dist
+      - name: Install the candidate and test tools
+        run: python -m pip install dist/*.whl pytest==8.4.2 black==26.3.1
+      - name: Run repository regression tests
+        run: python -m pytest -q -p no:cacheprovider
+
+  publish:
+    name: Publish verified distributions to PyPI
+    if: github.event_name == 'release' && github.repository == 'owebeeone/yidl-cache'
+    needs: [verify, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+    # No environment is required by the configured publisher (Environment: Any).
+    # This workflow uploads artifacts; it does not create tags or GitHub releases.
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: yidl-cache-distributions
+          path: dist
+
+      - name: Publish using PyPI trusted publishing
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
+        with:
+          packages-dir: dist/
